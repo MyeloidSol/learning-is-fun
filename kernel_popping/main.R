@@ -298,7 +298,8 @@ data <- data.frame(time = c(361.650,
                             614.573,
                             614.753,
                             615.804)
-) / 4
+)
+data$time <- (data$time - 18.40) / 4
 data$cumulative <- cumsum(rep(1,nrow(data)))
 
 # Plot data ----

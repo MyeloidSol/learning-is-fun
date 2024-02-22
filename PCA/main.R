@@ -2,7 +2,7 @@
 require(ggplot2)
 
 # Generate data
-N <- 1e7
+N <- 1e3
 V1 <- rnorm(N, 15, sd = 2)
 V2 <- 5 + rnorm(N, 2*V1, sd = 0.5)
 
@@ -43,12 +43,13 @@ firstPC <- iters[1:2, which.max(iters[3,])]
 
 # Plot data ----
 plot_data <- data.frame(mat[1,], mat[2,])
+colnames(plot_data) <- c("x","y")
 
 plot <- ggplot(data = plot_data,
-               mapping = aes(x = V1, y = V2)) +
+               mapping = aes(x = x, y = y)) +
   ggtitle("Cloud of Data and First Principal Component") +
-  coord_cartesian(xlim = c(min(0, firstPC[1], plot_data$V1), max(0, firstPC[1], plot_data$V1)),
-                  ylim = c(min(0, firstPC[2], plot_data$V2), max(0, firstPC[2], plot_data$V2)),
+  coord_cartesian(xlim = c(min(0, firstPC[1], plot_data$x), max(0, firstPC[1], plot_data$x)),
+                  ylim = c(min(0, firstPC[2], plot_data$y), max(0, firstPC[2], plot_data$y)),
                   clip = "off") +
   geom_point() +
   theme_bw() +
@@ -217,16 +218,16 @@ grad_firstPC <- cur_vec
 
 # Generate data
 Nobs <- 1e5
-Nfeat <- 100
+Nfeat <- 20
 mat <- rbind(rnorm(Nobs, 0, sd = 10))
 
 for (i in 2:Nfeat) {
   mat <- rbind(mat,
                rnorm(Nobs,
-                     mean = colSums(mat * rnorm(nrow(mat), sd = 0.5)),
+                     mean = colSums(mat * rnorm(nrow(mat), sd = 0.1)),
                      sd = rexp(Nobs, rate = 1))
                )
 }
 
-x <- my_pca(mat, 5, 1e-7, 1e-5, 100)
+x <- my_pca(mat, 5, 1e-8, 1e-5, 200)
 
